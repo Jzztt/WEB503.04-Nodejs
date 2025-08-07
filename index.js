@@ -1,43 +1,33 @@
 import express from "express";
 import bodyParser from "body-parser"
+import mongoose from "mongoose";
+import { ProductRouter } from "./routes/product.js";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Respone send
-app.get("/", (req,res) => {
-    res.send("<h1>Home page</h1>")
-})
+const connectDatabase = async () => {
+    try {
+        await mongoose.connect("mongodb://localhost:27017/smartphone-shop")
+        console.log("connected");
+    } catch (error) {
+        console.log(error);
+    }
+};
+connectDatabase();
 
-app.get("/about", (req,res) => {
-    res.send("About page")
-})
+// app.get("/product",(req,res)=> {
+//  res.send("product")
+// })
 
-// Response json + status
-app.get("/category", (req,res) => {
-    res.status(200).json({
-        name: "Apple"
-    })
-})
+app.use("/api",ProductRouter)
 
-// Request Params
-app.get("/product/:id", (req,res)=> {
-    console.log("id:", req.params.id);
-})
 
-// Request Query
-app.get("/product", (req,res)=> {
-console.log(req.query.q);
-})
 
-// Request Body
-app.post("/create-product",(req,res)=> {
-    console.log(req.body);
-})
 
 const PORT = 3000
 app.listen(PORT,() => {
-    console.log(`Ung dụng đang chạy với port ${PORT}`);
+    console.log(`Ung dụng đang chạy với port: http://localhost:${PORT}`);
 })
