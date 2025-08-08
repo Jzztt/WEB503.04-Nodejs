@@ -1,29 +1,22 @@
-import express from "express"
+import express from "express";
+import {
+  createProduct,
+  deleteProduct,
+  getDetailProduct,
+  getProduct,
+  updateProduct,
+} from "../controllers/ProductController.js";
 
 const router = express.Router();
 
-router.get("/product", (req,res) => {
-    res.send("Lấy danh sách sản phẩm")
-})
+router.get("/product", getProduct);
 
-router.get("/product/:id", (req,res) => {
-    const id = req.params.id
-    res.send(`Lấy chi tiết sản phẩm có id là ${id}`)
-})
+router.get("/product/:id", getDetailProduct);
 
-router.post("/product", (req,res)=> {
-    res.send("Thêm sản phẩm");
-})
+router.post("/product", createProduct);
 
+router.put("/product/:id", updateProduct);
 
-router.put("/product/:id", (req,res)=> {
-    const id = req.params.id
-    res.send(`Sửa sản phẩm có id là : ${id} `);
-})
-
-router.delete("/product/:id", (req,res)=> {
-    const id = req.params.id
-    res.send(`Xóa sản phẩm có id là : ${id}`);
-})
+router.delete("/product/:id",deleteProduct);
 
 export const ProductRouter = router;
