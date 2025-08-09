@@ -1,5 +1,13 @@
+import Product from "../models/ProductModel.js";
+
 const getProduct = async (req, res) => {
-  res.send("Lấy danh sách sản phẩm");
+ const products = await Product.find();
+ res.status(201).json({
+    success: true,
+    data: products,
+    message: "Product Fetched Successfully"
+  })
+
 };
 // getDetailProduct
 const getDetailProduct = async (req, res) => {
@@ -8,8 +16,25 @@ const getDetailProduct = async (req, res) => {
 };
 // CreateProduct
 const createProduct = async (req, res) => {
-  res.send("Thêm sản phẩm");
+  const newProduct = await Product.create(req.body);
+  res.status(201).json({
+    success: true,
+    data: newProduct,
+    message: "Product Created Successfully"
+  })
 }
+
+
+
+
+
+
+
+
+
+
+
+
 // updateProduct
 const updateProduct = async (req, res) => {
   const id = req.params.id;
