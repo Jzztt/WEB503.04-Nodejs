@@ -1,13 +1,13 @@
 import Product from "../models/ProductModel.js";
+import ProductSchema from "../schemas/ProductSchema.js";
 
 const getProduct = async (req, res) => {
- const products = await Product.find();
- res.status(201).json({
+  const products = await Product.find();
+  res.status(201).json({
     success: true,
     data: products,
-    message: "Product Fetched Successfully"
-  })
-
+    message: "Product Fetched Successfully",
+  });
 };
 // getDetailProduct
 const getDetailProduct = async (req, res) => {
@@ -16,34 +16,44 @@ const getDetailProduct = async (req, res) => {
 };
 // CreateProduct
 const createProduct = async (req, res) => {
-  const newProduct = await Product.create(req.body);
-  res.status(201).json({
-    success: true,
-    data: newProduct,
-    message: "Product Created Successfully"
-  })
-}
-
-
-
-
-
-
-
-
-
-
-
+  try {
+    const { error } = ProductSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const errors = error.details.map((detail) => detail.message);
+      return res.status(400).json({
+        success: false,
+        message: errors,
+      });
+    }
+    const newProduct = await Product.create(req.body);
+    res.status(201).json({
+      success: true,
+      data: newProduct,
+      message: "Product Created Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
 
 // updateProduct
 const updateProduct = async (req, res) => {
   const id = req.params.id;
   res.send(`Sửa sản phẩm có id là : ${id} `);
-}
+};
 // deleteProduct
-const deleteProduct =  async (req, res) => {
+const deleteProduct = async (req, res) => {
   const id = req.params.id;
   res.send(`Xóa sản phẩm có id là : ${id}`);
-}
+};
 
-export { getProduct, getDetailProduct, createProduct, updateProduct, deleteProduct };
+export {
+  getProduct,
+  getDetailProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+};
