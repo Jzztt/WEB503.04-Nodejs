@@ -2,17 +2,29 @@ import Product from "../models/ProductModel.js";
 import ProductSchema from "../schemas/ProductSchema.js";
 
 const getProduct = async (req, res) => {
-  const products = await Product.find();
-  res.status(201).json({
-    success: true,
-    data: products,
-    message: "Product Fetched Successfully",
-  });
+  try {
+    const products = await Product.find();
+    res.status(201).json({
+      success: true,
+      data: products,
+      message: "Product Fetched Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    })
+  }
 };
 // getDetailProduct
 const getDetailProduct = async (req, res) => {
   const id = req.params.id;
-  res.send(`Lấy chi tiết sản phẩm có id là ${id}`);
+  const product = await Product.findById(id);
+  res.status(200).json({
+    success: true,
+    data: product,
+    message: "Product detail Fetched Successfully",
+  });
 };
 // CreateProduct
 const createProduct = async (req, res) => {
@@ -47,7 +59,12 @@ const updateProduct = async (req, res) => {
 // deleteProduct
 const deleteProduct = async (req, res) => {
   const id = req.params.id;
-  res.send(`Xóa sản phẩm có id là : ${id}`);
+  const product = await Product.findByIdAndDelete(id)
+  res.status(200).json({
+    success: true,
+    data: product,
+    message: "Product delete Successfully",
+  });
 };
 
 export {
