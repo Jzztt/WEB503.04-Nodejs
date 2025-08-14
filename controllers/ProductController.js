@@ -13,7 +13,7 @@ const getProduct = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Something went wrong",
-    })
+    });
   }
 };
 // getDetailProduct
@@ -53,13 +53,27 @@ const createProduct = async (req, res) => {
 
 // updateProduct
 const updateProduct = async (req, res) => {
-  const id = req.params.id;
-  res.send(`Sửa sản phẩm có id là : ${id} `);
+  try {
+    const id = req.params.id;
+    const product = await Product.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    res.status(200).json({
+      success: true,
+      data: product,
+      message: "Product Updated Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
 };
 // deleteProduct
 const deleteProduct = async (req, res) => {
   const id = req.params.id;
-  const product = await Product.findByIdAndDelete(id)
+  const product = await Product.findByIdAndDelete(id);
   res.status(200).json({
     success: true,
     data: product,
